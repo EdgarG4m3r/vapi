@@ -35,7 +35,7 @@ curl -sH "API-Key: $API_KEY" https://api.vultr.com/v1/server/list | python -mjso
 }
 
 server_listsid() {
-curl -sH "API-Key: $API_KEY" https://api.vultr.com/v1/server/list | python -mjson.tool | tr '"' ' ' | tr ',' ' ' | tr '{}' ' ' | grep -e "SUBID" -e "label"
+echo "" && curl -sH "API-Key: $API_KEY" https://api.vultr.com/v1/server/list | python -mjson.tool | tr '"' ' ' | tr ',' ' ' | tr '{}' ' ' | grep -e "SUBID" -e "label" && echo ""
 }
 
 #######################
