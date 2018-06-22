@@ -100,7 +100,7 @@ curl -sH "API-Key: $API_KEY" https://api.vultr.com/v1/snapshot/create --data "SU
 snapshot_destroy() {
 echo -n "Enter snapshot ID: "
 read SSID
-curl -sH "API-Key: $API_KEY" https://api.vultr.com/v1/snapshot/destroy --data "SNAPSHOTID=$SSID"
+curl -sH "API-Key: $API_KEY" https://api.vultr.com/v1/snapshot/destroy --data "SNAPSHOTID=$SSID" && echo "Snapshot $SSID delete action sent." && echo ""
 }
 
 snapshot_list() {
