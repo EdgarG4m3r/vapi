@@ -18,6 +18,8 @@ echo " -ls,    --list-servers     List all servers and information related to ac
 echo " -lsid,  --list-subids      List SUBID of each server."
 echo " -ebu,   --enable-backups   Enable backups for server, must provide SUBID. (See -lsid.)"
 echo " -dbu,   --disable-backups  Disable backups for server, must provide SUBID. (See -lsid.)"
+echo " -lsbu,  --list-backups     List all current backups available for restore."
+echo " -lsbus, --list-bu-schedule List backup schedule, must provide SUBID. (See -lsid.)"
 echo " -lss,   --list-snapshots   List all currently available snapshots."
 echo " -lfwr,  --list-fw-rules    List firewall rules for specified group."
 echo " -lfwg,  --list-fw-groups   List firewall groups. To create new, use --create-fw-group."
@@ -47,9 +49,19 @@ curl -sH "API-Key: $API_KEY" https://api.vultr.com/v1/server/backup_enable --dat
 }
 
 server_disablebackup() {
-cho -n "Please enter SUBID of server to disable backups on: "
+echo -n "Please enter SUBID of server to disable backups on: "
 read DBKUPID
 curl -sH "API-Key: $API_KEY" https://api.vultr.com/v1/server/backup_disable --data 'SUBID=$DBKUPID' | python -mjson.tool | tr '"' ' ' | tr ',' ' ' | tr '{}' ' '
+}
+
+server_backupls() {
+url -sH "API-Key: $API_KEY" https://api.vultr.com/v1/backup/list | python -mjson.tool | tr '"' ' ' | tr ',' ' ' | tr '{}' ' '
+}
+
+getbackupschedule() {
+echo -n "Please enter SUBID of server to view backup schedule for: "
+read SCHID
+curl -sH "API-Key: 67EVK5Z4ORABAATPJCVXZFUQOLIU6MX3DPMA" https://api.vultr.com/v1/server/backup_get_schedule --data 'SUBID=$SCHID' | python -mjson.tool | tr '"' ' ' | tr ',' ' ' | tr '{}' ' '
 }
 
 #######################
@@ -129,6 +141,8 @@ case $1 in
 	"--list-subids"|"--listsid"|"-lsid") server_listsid ;;
 	"--enable-backups"|"--enablebu"|"-ebu") server_enablebackup ;;
 	"--disable-backups"|"--disablebu"|"-dbu") server_disablebackup ;;
+	"--list-backups"|"--listbu"|"-lsbu") server_backupls ;;
+	"--list-bu-schedule"|"--listbus"|"-lsbus") getbackupschedule ;;
 	"--list-snapshots"|"--listss"|"-lss") snapshot_list ;;
 	"--list-fw-rules"|"--listfwr"|"-lfwr") firewall_rulelist ;;
 	"--list-fw-groups"|"--listfwg"|"-lfwg") firewall_grouplist ;;
